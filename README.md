@@ -54,3 +54,47 @@ Four classification algorithms were evaluated:
 Rather than selecting a model based only on accuracy, performance was evaluated across multiple measures including precision, recall, F1-score, ROC-AUC, cross-validation performance, and the difference between training and testing accuracy.
 
 This approach provides a more complete assessment of whether a model can identify customers at risk while continuing to perform reliably on unseen data.
+
+## Dataset Overview
+
+The analysis uses a retail banking customer dataset containing 10,000 customer records and 13 original variables. The target variable is `Exited`, where `0` represents a customer who remained with the bank and `1` represents a customer who churned.
+
+The dataset includes customer demographics, financial information, product relationships, and account activity that can be evaluated as potential predictors of churn.
+
+### Key Dataset Characteristics
+
+| Metric             |  Value |
+| ------------------ | -----: |
+| Customer Records   | 10,000 |
+| Original Variables |     13 |
+| Retained Customers |  7,963 |
+| Churned Customers  |  2,037 |
+| Churn Rate         | 20.37% |
+| Missing Values     |      0 |
+
+### Customer Churn Distribution
+
+![Customer Churn Distribution](images/churn_distribution.png)
+
+The target variable is imbalanced. Approximately 79.63% of customers remained with the bank, while 20.37% churned.
+
+This imbalance is important when evaluating model performance. Accuracy alone could make a model appear effective even if it performs poorly at identifying customers who actually churn. For this reason, the models were also evaluated using precision, recall, F1-score, ROC-AUC, and confusion matrices.
+
+### Predictive Features
+
+| Feature           | Description                              |
+| ----------------- | ---------------------------------------- |
+| `CreditScore`     | Customer credit score                    |
+| `Gender`          | Customer gender                          |
+| `Age`             | Customer age                             |
+| `Tenure`          | Length of customer relationship          |
+| `Balance`         | Account balance                          |
+| `NumOfProducts`   | Number of bank products used             |
+| `HasCrCard`       | Whether the customer has a credit card   |
+| `IsActiveMember`  | Whether the customer is an active member |
+| `EstimatedSalary` | Estimated customer salary                |
+
+Three identifier fields, `RowNumber`, `CustomerId`, and `Surname`, were removed before modeling because they were not used as predictive features.
+
+After preprocessing, the modeling dataset contained nine predictor variables and the `Exited` target.
+
