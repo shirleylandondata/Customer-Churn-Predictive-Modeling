@@ -233,3 +233,41 @@ Based on the initial performance comparison, Random Forest emerged as the strong
 * ROC-AUC: 0.8472
 
 Random Forest did not lead every individual metric, but it provided the strongest overall balance across the evaluation criteria.
+
+## Classification Performance
+
+Accuracy provides an overall measure of model performance, but for a churn prediction problem it is also important to understand what types of classification errors each model makes.
+
+Confusion matrices were used to examine how effectively each model distinguished between retained and churned customers.
+
+### Logistic Regression vs. Support Vector Machine
+
+![Logistic Regression and SVM Confusion Matrices](images/confusion_matrix_lr_svm.png)
+
+### Random Forest vs. Decision Tree
+
+![Random Forest and Decision Tree Confusion Matrices](images/confusion_matrix_rf_dt.png)
+
+### Churn Classification Results
+
+| Model               | Correctly Identified Churners | Missed Churners | False Churn Alerts |
+| ------------------- | ----------------------------: | --------------: | -----------------: |
+| Logistic Regression |                            60 |             347 |                 43 |
+| SVM                 |                           153 |             254 |                 30 |
+| Random Forest       |                           168 |             239 |                 42 |
+| Decision Tree       |                           165 |             242 |                 92 |
+
+### Business Interpretation
+
+The confusion matrices highlight the tradeoff between precision and recall.
+
+Logistic Regression missed 347 of the 407 customers who actually churned. This helps explain why its overall accuracy of 80.50% was misleading when considered by itself.
+
+SVM produced only 30 false churn alerts, the lowest among the four models. This contributed to its leading precision score of 83.61%.
+
+Random Forest correctly identified 168 churners, the highest number among the four models, while generating 42 false churn alerts. This resulted in the strongest recall and F1-score.
+
+Decision Tree identified nearly as many churners as Random Forest but generated 92 false churn alerts, more than twice the number produced by Random Forest.
+
+From a retention perspective, Random Forest provided the strongest balance. It identified the largest number of customers who actually churned without producing the higher level of false-positive predictions seen with the Decision Tree.
+
