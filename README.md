@@ -470,3 +470,130 @@ Three findings stood out:
 
 The final result was not simply a higher-performing classification model. The analysis produced a framework for identifying churn risk and translating predictive output into customer retention decisions.
 
+## Project Structure
+
+```text
+customer-churn-predictive-modeling/
+│
+├── data/
+│   └── README.md
+│
+├── images/
+│   ├── churn_distribution.png
+│   ├── correlation_matrix.png
+│   ├── model_accuracy_precision.png
+│   ├── model_recall_f1.png
+│   ├── confusion_matrix_lr_svm.png
+│   ├── confusion_matrix_rf_dt.png
+│   ├── roc_curves.png
+│   ├── feature_importance.png
+│   ├── train_test_comparison.png
+│   └── cross_validation.png
+│
+├── notebooks/
+│   └── customer_churn_modeling.ipynb
+│
+├── reports/
+│   └── model_analysis.pdf
+│
+├── .gitignore
+├── requirements.txt
+└── README.md
+```
+
+### Repository Contents
+
+* `data/` — Information about the customer churn dataset used for the analysis
+* `images/` — Visualizations generated during exploratory analysis and model evaluation
+* `notebooks/` — Complete Python machine learning workflow
+* `reports/` — Supporting model analysis and project documentation
+* `requirements.txt` — Python packages required to reproduce the analysis
+
+---
+
+## How to Run the Analysis
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/shirleylandondata/customer-churn-predictive-modeling.git
+cd customer-churn-predictive-modeling
+```
+
+### 2. Install Required Packages
+
+```bash
+pip install -r requirements.txt
+```
+
+### 3. Add the Dataset
+
+Place `Churn_Modelling.csv` in the appropriate data location described in the `data/README.md`.
+
+### 4. Run the Notebook
+
+Open:
+
+```text
+notebooks/customer_churn_modeling.ipynb
+```
+
+The notebook walks through the complete workflow:
+
+`Data Exploration` → `Preprocessing` → `Model Training` → `Model Evaluation` → `Model Comparison` → `Final Selection`
+
+---
+
+## Limitations & Future Improvements
+
+The project provides a strong baseline for customer churn classification, but several areas could be explored before applying the model in a production environment.
+
+### Current Limitations
+
+* The target variable is imbalanced, with approximately 20% of customers belonging to the churn class.
+* The models were evaluated using a single dataset rather than customer data collected across multiple time periods.
+* Feature importance identifies variables used by the model but does not establish causal relationships with churn.
+* The current analysis uses a default classification threshold rather than optimizing the threshold around the business cost of false positives and false negatives.
+* The analysis evaluates predictive performance but does not measure the financial impact of retention interventions.
+
+### Future Improvements
+
+* Tune model hyperparameters using `GridSearchCV` or `RandomizedSearchCV`
+* Evaluate class-weighted models to address class imbalance
+* Compare additional boosting algorithms
+* Add Precision-Recall curves for minority-class evaluation
+* Optimize the classification threshold based on business objectives
+* Use SHAP values to improve individual prediction explainability
+* Convert predicted probabilities into customer risk segments
+* Estimate the financial value of successful churn interventions
+* Monitor model performance and data drift over time
+
+A future version could extend the analysis from predicting churn to determining which high-risk customers should receive retention offers based on expected customer value and intervention cost.
+
+---
+
+## Dataset
+
+The project uses a retail banking customer churn dataset containing 10,000 customer records.
+
+The modeling target is:
+
+`Exited`
+
+* `0` = Customer retained
+* `1` = Customer churned
+
+The analysis uses nine predictive features after removing identifier fields that were not used for modeling.
+
+See the `data/README.md` file for additional dataset information.
+
+---
+
+## Author
+
+Shirley Landon
+
+Data Analytics | Predictive Modeling | Python | SQL | Machine Learning
+
+This project demonstrates my approach to translating a business problem into a structured predictive modeling workflow, evaluating competing machine learning models, and communicating the results in a way that supports business decision-making.
+
