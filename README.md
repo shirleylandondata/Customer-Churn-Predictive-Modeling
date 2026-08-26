@@ -2,238 +2,187 @@
 
 ## What This Project Demonstrates
 
-This project demonstrates an end-to-end machine learning workflow for predicting customer churn and selecting the classification model that provides the strongest overall performance.
+This project demonstrates an end-to-end predictive modeling workflow for identifying customers at risk of churn.
 
-Using a retail banking dataset containing 10,000 customer records, I built and evaluated four supervised machine learning models to determine which approach could best identify customers at risk of leaving the bank.
+The analysis moves beyond simply comparing model accuracy. It evaluates how effectively different machine learning algorithms identify customers who actually churn, how well the models generalize to unseen data, and how predictive results could support customer retention decisions.
 
 ### Skills Demonstrated
 
-* Exploratory Data Analysis (EDA)
-* Data preprocessing and feature engineering
-* Binary classification
-* Logistic Regression
-* Support Vector Machine (SVM)
-* Random Forest
-* Decision Tree
-* Train-test splitting and feature scaling
-* Cross-validation
-* Model performance evaluation
-* Precision, recall, F1-score, and ROC-AUC analysis
-* Confusion matrix analysis
-* Feature importance analysis
-* Overfitting and generalization assessment
-* Translating model results into business recommendations
+- Exploratory Data Analysis
+- Data preprocessing and feature preparation
+- Binary classification
+- Logistic Regression
+- Support Vector Machines
+- Random Forest
+- Decision Trees
+- Model evaluation and comparison
+- Confusion matrix analysis
+- ROC-AUC analysis
+- Cross-validation
+- Feature importance analysis
+- Overfitting and generalization analysis
+- Business-focused model selection
+- Translating predictive output into business recommendations
 
 ### Tools & Technologies
 
-`Python` `Pandas` `NumPy` `Scikit-learn` `Matplotlib` `Seaborn` `Google Colab`
+- Python
+- pandas
+- NumPy
+- scikit-learn
+- Matplotlib
+- Seaborn
+- Google Colab
+- GitHub
 
 ---
 
 ## Business Problem
 
-Customer churn can reduce recurring revenue and increase the cost of acquiring replacement customers. A retail bank wants to identify customers who are at greater risk of leaving so retention efforts can be targeted before those customers exit.
+Customer churn can reduce recurring revenue, increase customer acquisition costs, and weaken long-term customer relationships.
 
-The dataset contains demographic, financial, and account activity information for 10,000 customers. The target variable, `Exited`, identifies whether a customer remained with the bank or churned.
-
-Exploratory analysis identified an overall churn rate of 20.37%, meaning approximately one in five customers in the dataset had left the bank.
+A retail bank wants to identify customers who are more likely to leave so retention resources can be focused on customers with elevated churn risk.
 
 ### Business Question
 
-Can customer characteristics and account behavior be used to predict customer churn, and which classification model provides the best balance of predictive performance and generalization to unseen customers?
+Can customer account and behavioral characteristics be used to predict which customers are most likely to churn?
 
 ### Modeling Approach
 
-Four classification algorithms were evaluated:
+Four classification models were developed and compared:
 
 1. Logistic Regression
-2. Support Vector Machine (SVM)
+2. Support Vector Machine
 3. Random Forest
 4. Decision Tree
 
-Rather than selecting a model based only on accuracy, performance was evaluated across multiple measures including precision, recall, F1-score, ROC-AUC, cross-validation performance, and the difference between training and testing accuracy.
+Model selection considered multiple performance dimensions rather than relying on accuracy alone.
 
-This approach provides a more complete assessment of whether a model can identify customers at risk while continuing to perform reliably on unseen data.
+---
 
 ## Dataset Overview
 
-The analysis uses a retail banking customer dataset containing 10,000 customer records and 13 original variables. The target variable is `Exited`, where `0` represents a customer who remained with the bank and `1` represents a customer who churned.
+The analysis uses a retail banking customer churn dataset containing 10,000 customer records.
 
-The dataset includes customer demographics, financial information, product relationships, and account activity that can be evaluated as potential predictors of churn.
+The modeling target is `Exited`:
+
+- `0` = Customer retained
+- `1` = Customer churned
 
 ### Key Dataset Characteristics
 
-| Metric             |  Value |
-| ------------------ | -----: |
-| Customer Records   | 10,000 |
-| Original Variables |     13 |
-| Retained Customers |  7,963 |
-| Churned Customers  |  2,037 |
-| Churn Rate         | 20.37% |
-| Missing Values     |      0 |
+- Total customers: 10,000
+- Retained customers: 7,963
+- Churned customers: 2,037
+- Churn rate: 20.37%
+- Retention rate: 79.63%
+
+The class distribution creates an imbalanced classification problem. Because most customers remain with the bank, accuracy alone is not sufficient for evaluating model performance.
 
 ### Customer Churn Distribution
 
 ![Customer Churn Distribution](images/churn_distribution.png)
 
-The target variable is imbalanced. Approximately 79.63% of customers remained with the bank, while 20.37% churned.
-
-This imbalance is important when evaluating model performance. Accuracy alone could make a model appear effective even if it performs poorly at identifying customers who actually churn. For this reason, the models were also evaluated using precision, recall, F1-score, ROC-AUC, and confusion matrices.
-
 ### Predictive Features
 
-| Feature           | Description                              |
-| ----------------- | ---------------------------------------- |
-| `CreditScore`     | Customer credit score                    |
-| `Gender`          | Customer gender                          |
-| `Age`             | Customer age                             |
-| `Tenure`          | Length of customer relationship          |
-| `Balance`         | Account balance                          |
-| `NumOfProducts`   | Number of bank products used             |
-| `HasCrCard`       | Whether the customer has a credit card   |
-| `IsActiveMember`  | Whether the customer is an active member |
-| `EstimatedSalary` | Estimated customer salary                |
+After removing identifier fields, nine customer characteristics were used for modeling:
 
-Three identifier fields, `RowNumber`, `CustomerId`, and `Surname`, were removed before modeling because they were not used as predictive features.
+- Credit Score
+- Gender
+- Age
+- Tenure
+- Balance
+- Number of Products
+- Has Credit Card
+- Active Member Status
+- Estimated Salary
 
-After preprocessing, the modeling dataset contained nine predictor variables and the `Exited` target.
+Identifier fields including `RowNumber`, `CustomerId`, and `Surname` were excluded because they function as identifiers rather than meaningful predictive customer characteristics.
+
+See `data/README.md` for additional dataset information.
+
+---
 
 ## Exploratory Data Analysis
 
-Before training the classification models, I explored the relationships between customer characteristics and the `Exited` target variable.
-
-A correlation matrix was used to identify linear relationships among the numerical features and provide an initial view of which variables may be associated with customer churn.
+Before training the models, I examined relationships between the numerical features and the churn target.
 
 ### Feature Correlation Matrix
 
 ![Feature Correlation Matrix](images/correlation_matrix.png)
 
+The correlation matrix provided an initial view of linear relationships in the dataset.
+
 ### Initial Findings
 
-The correlation analysis highlighted several relationships with customer churn:
+Several features showed relationships with churn, but the exploratory analysis also demonstrated an important modeling principle: correlation alone does not determine predictive value.
 
-| Feature            | Correlation with Churn |
-| ------------------ | ---------------------: |
-| Age                |                  0.285 |
-| Balance            |                  0.119 |
-| Estimated Salary   |                  0.012 |
-| Has Credit Card    |                 -0.007 |
-| Tenure             |                 -0.014 |
-| Credit Score       |                 -0.027 |
-| Number of Products |                 -0.048 |
-| Gender             |                 -0.107 |
-| Active Member      |                 -0.156 |
+Some variables with relatively weak linear relationships later became important within nonlinear tree-based models.
 
-`Age` showed the strongest positive linear relationship with churn. Older customers in the dataset were more likely to be associated with the `Exited` class.
-
-`IsActiveMember` showed the strongest negative relationship with churn, suggesting that active customers were less likely to leave the bank.
-
-Account `Balance` also showed a positive relationship with churn, although the relationship was considerably weaker than age.
-
-These correlations provide an initial view of customer behavior, but they do not establish causation or fully capture nonlinear relationships. For that reason, all nine predictive features were retained for the classification stage rather than selecting variables based only on correlation.
+For this reason, the correlation analysis was used as an exploratory tool rather than as the sole method for selecting predictive features.
 
 ---
 
 ## Data Preparation
 
-The dataset was prepared for machine learning before model training.
+The dataset was prepared for machine learning before model development.
 
 ### Preprocessing Steps
 
-1. Removed non-predictive identifier fields:
+- Removed identifier fields that were not useful for prediction
+- Encoded the categorical `Gender` variable numerically
+- Separated predictive features from the `Exited` target
+- Created an 80/20 stratified train-test split
+- Preserved the churn distribution across training and testing datasets
+- Standardized numerical features using `StandardScaler`
+- Fitted the scaler only on the training data to prevent information leakage
 
-   * `RowNumber`
-   * `CustomerId`
-   * `Surname`
+### Train-Test Split
 
-2. Encoded the categorical `Gender` variable into numerical format.
-
-3. Separated the nine predictive features from the `Exited` target variable.
-
-4. Split the dataset into:
-
-   * 8,000 training records
-   * 2,000 testing records
-
-5. Used stratified sampling to preserve the approximately 20.37% churn rate across both datasets.
-
-6. Standardized the predictive features using `StandardScaler`.
-
-The scaler was fitted only on the training data and then applied to the testing data to prevent information from the test set from influencing model training.
+- Training set: 8,000 customers
+- Testing set: 2,000 customers
+- Approximate churn rate in both sets: 20.4%
 
 ### Modeling Pipeline
 
 `Raw Customer Data` → `Data Cleaning` → `Feature Encoding` → `Train/Test Split` → `Feature Scaling` → `Model Training` → `Model Evaluation`
 
-### Model Performance Comparison
+---
+
+## Model Development & Performance Comparison
+
+Four classification algorithms were trained using the same training and testing framework.
+
+### Performance Results
+
+| Model | Test Accuracy | Precision | Recall | F1-Score | ROC-AUC | CV Accuracy |
+|---|---:|---:|---:|---:|---:|---:|
+| Logistic Regression | 80.50% | 58.25% | 14.74% | 0.2353 | 0.7711 | 80.74% |
+| SVM | 85.80% | 83.61% | 37.59% | 0.5186 | 0.7976 | 85.06% |
+| Random Forest | 85.95% | 80.00% | 41.28% | 0.5446 | 0.8472 | 85.71% |
+| Decision Tree | 83.30% | 64.20% | 40.54% | 0.4970 | 0.7788 | 82.85% |
+
+### Visual Performance Comparison
 
 ![Model Accuracy and Precision Comparison](images/model_accuracy_precision.png)
 
 ![Model Recall and F1-Score Comparison](images/model_recall_f1.png)
 
-
-## Model Development & Performance Comparison
-
-Four supervised classification models were trained and evaluated to determine which approach provided the strongest performance for customer churn prediction.
-
-### Models Evaluated
-
-| Model                        | Purpose                                                                                  |
-| ---------------------------- | ---------------------------------------------------------------------------------------- |
-| Logistic Regression          | Established an interpretable baseline for binary classification                          |
-| Support Vector Machine (SVM) | Modeled nonlinear decision boundaries using an RBF kernel                                |
-| Random Forest                | Combined multiple decision trees to capture complex relationships and reduce overfitting |
-| Decision Tree                | Provided an interpretable tree-based classification model                                |
-
-Each model was evaluated on the same held-out test dataset to provide a consistent comparison.
-
-
-### Performance Results
-
-| Model               | Test Accuracy | Precision | Recall | F1-Score | ROC-AUC |
-| ------------------- | ------------: | --------: | -----: | -------: | ------: |
-| Logistic Regression |        80.50% |    58.25% | 14.74% |   0.2353 |  0.7711 |
-| SVM                 |        85.80% |    83.61% | 37.59% |   0.5186 |  0.7976 |
-| Random Forest       |        85.95% |    80.00% | 41.28% |   0.5446 |  0.8472 |
-| Decision Tree       |        83.30% |    64.20% | 40.54% |   0.4970 |  0.7788 |
-
 ### What the Results Show
 
-Random Forest achieved the highest overall testing accuracy at 85.95%, narrowly outperforming SVM at 85.80%.
+Random Forest achieved the highest testing accuracy at 85.95%.
 
-SVM achieved the highest precision at 83.61%. This means that when SVM predicted that a customer would churn, it produced fewer false-positive churn predictions than the other models.
+SVM achieved the highest precision at 83.61%, meaning that when it predicted churn, those predictions were more likely to be correct.
 
-Random Forest achieved the highest recall at 41.28%, meaning it identified a larger share of the customers who actually churned.
+Random Forest achieved the highest recall at 41.28% and the highest F1-score at 0.5446, providing a stronger balance between identifying churners and maintaining precision.
 
-Random Forest also produced the highest F1-score at 0.5446. Because F1-score balances precision and recall, this result was important when evaluating performance on the minority churn class.
+Logistic Regression demonstrated why accuracy alone can be misleading in an imbalanced classification problem. Although the model achieved 80.50% testing accuracy, it identified only 14.74% of customers who actually churned.
 
-### Why Accuracy Alone Was Not Enough
+---
 
-The dataset contains substantially more retained customers than churned customers. Because of this class imbalance, a model could achieve relatively high overall accuracy while still failing to identify many customers who actually churn.
+## Confusion Matrix Analysis
 
-Logistic Regression demonstrates this issue.
-
-Although the model achieved 80.50% testing accuracy, its recall for churned customers was only 14.74%. In other words, overall accuracy did not provide a complete picture of the model's usefulness for the churn prediction problem.
-
-For this reason, model selection considered multiple performance measures rather than relying on accuracy alone.
-
-### Leading Model
-
-Based on the initial performance comparison, Random Forest emerged as the strongest candidate:
-
-* Testing Accuracy: 85.95%
-* Precision: 80.00%
-* Recall: 41.28%
-* F1-Score: 0.5446
-* ROC-AUC: 0.8472
-
-Random Forest did not lead every individual metric, but it provided the strongest overall balance across the evaluation criteria.
-
-## Classification Performance
-
-Accuracy provides an overall measure of model performance, but for a churn prediction problem it is also important to understand what types of classification errors each model makes.
-
-Confusion matrices were used to examine how effectively each model distinguished between retained and churned customers.
+Confusion matrices were used to examine the types of classification errors produced by each model.
 
 ### Logistic Regression vs. Support Vector Machine
 
@@ -245,57 +194,51 @@ Confusion matrices were used to examine how effectively each model distinguished
 
 ### Churn Classification Results
 
-| Model               | Correctly Identified Churners | Missed Churners | False Churn Alerts |
-| ------------------- | ----------------------------: | --------------: | -----------------: |
-| Logistic Regression |                            60 |             347 |                 43 |
-| SVM                 |                           153 |             254 |                 30 |
-| Random Forest       |                           168 |             239 |                 42 |
-| Decision Tree       |                           165 |             242 |                 92 |
+| Model | Actual Churners Identified | Churners Missed | False Churn Predictions |
+|---|---:|---:|---:|
+| Logistic Regression | 60 | 347 | 43 |
+| SVM | 153 | 254 | 30 |
+| Random Forest | 168 | 239 | 42 |
+| Decision Tree | 165 | 242 | 92 |
 
 ### Business Interpretation
 
-The confusion matrices highlight the tradeoff between precision and recall.
+Random Forest identified the largest number of actual churners, correctly detecting 168 of the 407 churned customers in the test set.
 
-Logistic Regression missed 347 of the 407 customers who actually churned. This helps explain why its overall accuracy of 80.50% was misleading when considered by itself.
+SVM generated the fewest false-positive churn predictions, which explains its higher precision.
 
-SVM produced only 30 false churn alerts, the lowest among the four models. This contributed to its leading precision score of 83.61%.
+Decision Tree identified nearly as many churners as Random Forest but generated substantially more false positives.
 
-Random Forest correctly identified 168 churners, the highest number among the four models, while generating 42 false churn alerts. This resulted in the strongest recall and F1-score.
+Logistic Regression missed 347 of the 407 churners, showing that its relatively high accuracy was driven primarily by correctly identifying the majority retained class.
 
-Decision Tree identified nearly as many churners as Random Forest but generated 92 false churn alerts, more than twice the number produced by Random Forest.
+For a churn problem, these tradeoffs matter because missing a customer who is likely to leave may represent a lost opportunity for retention.
 
-From a retention perspective, Random Forest provided the strongest balance. It identified the largest number of customers who actually churned without producing the higher level of false-positive predictions seen with the Decision Tree.
+---
 
 ## ROC-AUC & Model Discrimination
 
-To evaluate how well each model could distinguish between customers who churned and customers who remained with the bank, I compared their Receiver Operating Characteristic (ROC) curves and Area Under the Curve (AUC) scores.
+ROC-AUC measures how effectively a model distinguishes between retained and churned customers across classification thresholds.
 
-### ROC Curve Comparison
+![ROC Curves](images/roc_curves.png)
 
-![ROC Curves for All Models](images/roc_curves.png)
+### ROC-AUC Results
 
-### AUC-ROC Results
+| Model | ROC-AUC |
+|---|---:|
+| Random Forest | 0.8472 |
+| SVM | 0.7976 |
+| Decision Tree | 0.7788 |
+| Logistic Regression | 0.7711 |
 
-| Model               | AUC-ROC |
-| ------------------- | ------: |
-| Logistic Regression |  0.7711 |
-| SVM                 |  0.7976 |
-| Random Forest       |  0.8472 |
-| Decision Tree       |  0.7788 |
+Random Forest achieved the highest ROC-AUC at 0.8472, providing the strongest overall discrimination between customers who remained and customers who churned.
 
-### Key Finding
+This result supports the broader model comparison because Random Forest performed well across several evaluation measures rather than dominating only one metric.
 
-Random Forest achieved the highest AUC-ROC score at 0.8472, providing the strongest overall ability among the four models to distinguish between churned and retained customers.
-
-SVM ranked second with an AUC-ROC of 0.7976, followed by Decision Tree at 0.7788 and Logistic Regression at 0.7711.
-
-The ROC-AUC results provide further support for selecting Random Forest. Its advantage was not limited to classification accuracy. The model also demonstrated the strongest overall discrimination between the two customer outcomes.
-
-Combined with its leading recall and F1-score, the AUC-ROC result strengthened the case for Random Forest as the best-performing model in this analysis.
+---
 
 ## Feature Importance & Business Insights
 
-After Random Forest emerged as the leading model, I examined feature importance to better understand which customer characteristics contributed most to its predictions.
+Tree-based models provide feature-importance estimates that help identify which variables contributed most strongly to their predictions.
 
 ### Tree-Based Feature Importance
 
@@ -303,141 +246,180 @@ After Random Forest emerged as the leading model, I examined feature importance 
 
 ### Random Forest Feature Importance
 
-| Rank | Feature            | Importance |
-| ---: | ------------------ | ---------: |
-|    1 | Age                |     33.87% |
-|    2 | Number of Products |     22.83% |
-|    3 | Balance            |     10.29% |
-|    4 | Estimated Salary   |      9.38% |
-|    5 | Credit Score       |      9.06% |
-|    6 | Active Member      |      7.22% |
-|    7 | Tenure             |      4.46% |
-|    8 | Gender             |      1.79% |
-|    9 | Has Credit Card    |      1.10% |
+| Feature | Importance |
+|---|---:|
+| Age | 0.3387 |
+| Number of Products | 0.2283 |
+| Balance | 0.1029 |
+| Estimated Salary | 0.0938 |
+| Credit Score | 0.0901 |
+| Active Member Status | 0.0722 |
+| Tenure | 0.0446 |
+| Gender | 0.0179 |
+| Has Credit Card | 0.0110 |
 
 ### Key Findings
 
-Age was the most influential feature in the Random Forest model, accounting for approximately 33.87% of total feature importance.
+`Age` was the most influential feature in the Random Forest model, accounting for approximately 33.9% of total feature importance.
 
-Number of Products ranked second at 22.83%. Together, these two variables represented approximately 57% of the model's total feature importance.
+`NumOfProducts` ranked second at approximately 22.8%.
 
-Balance, estimated salary, and credit score formed the next tier of predictive features.
+Together, these two variables represented approximately 57% of the model's total feature importance.
 
-Active membership also contributed to churn prediction, while tenure, gender, and credit card ownership had lower importance within the Random Forest model.
-
-### From Model Output to Business Action
-
-The feature importance results can help guide where a bank begins investigating customer retention.
-
-For example:
-
-* Customer age could be examined when developing churn-risk segments.
-* Product relationships could be analyzed to determine whether certain product-use patterns are associated with higher churn risk.
-* Account balance and activity could provide further context when prioritizing retention outreach.
-* Customers identified as high risk by the model could be prioritized for targeted retention campaigns rather than applying the same strategy across the entire customer base.
-
-Feature importance indicates how much the model relied on each variable when making predictions. It does not establish that a feature caused a customer to churn.
+Other meaningful contributors included customer balance, estimated salary, credit score, and active membership status.
 
 ### An Interesting Modeling Insight
 
-The exploratory correlation analysis and Random Forest results also demonstrate why predictive modeling can reveal relationships that simple correlation does not fully capture.
+One of the more useful findings emerged when comparing exploratory correlation analysis with Random Forest feature importance.
 
-For example, `NumOfProducts` had only a weak linear correlation with churn during exploratory analysis, yet it became the second-most-important feature in the Random Forest model.
+`NumOfProducts` showed only a weak linear correlation with churn during exploratory analysis, yet it became the second-most-important feature in the Random Forest model.
 
-This suggests that its predictive value may involve nonlinear relationships or interactions with other customer characteristics that are not apparent from correlation alone.
+This suggests that the relationship between product usage and churn may be nonlinear or may depend on interactions with other customer characteristics.
+
+The finding demonstrates why predictive modeling can uncover relationships that are not obvious from correlation analysis alone.
+
+Feature importance represents predictive contribution within the model. It does not establish that these variables cause customers to churn.
+
+### From Model Output to Business Action
+
+The feature-importance results could guide further customer analysis.
+
+For example, the business could examine whether churn risk changes across:
+
+- Customer age groups
+- Number of banking products held
+- Account balance levels
+- Active versus inactive customers
+- Credit score ranges
+
+These relationships would require further analysis before being translated into retention strategies.
+
+---
 
 ## Model Generalization & Overfitting
 
-Strong performance on training data does not guarantee that a machine learning model will perform well on new customers.
+A strong predictive model should perform well on both training data and previously unseen test data.
 
-To evaluate model reliability, I compared training accuracy with testing accuracy and examined five-fold cross-validation performance.
-
-### Training vs. Testing Performance
+Training and testing accuracy were compared to evaluate generalization.
 
 ![Training vs Testing Accuracy](images/train_test_comparison.png)
 
-| Model               | Training Accuracy | Testing Accuracy |   Gap |
-| ------------------- | ----------------: | ---------------: | ----: |
-| Logistic Regression |            80.88% |           80.50% | 0.38% |
-| SVM                 |            86.23% |           85.80% | 0.43% |
-| Random Forest       |            89.38% |           85.95% | 3.43% |
-| Decision Tree       |            89.41% |           83.30% | 6.11% |
+### Training vs. Testing Performance
 
-Logistic Regression and SVM showed very small differences between training and testing accuracy.
-
-Random Forest had a larger gap of 3.43 percentage points but remained below the 5-percentage-point threshold used in this analysis to flag potential overfitting.
-
-Decision Tree showed the largest performance gap at 6.11 percentage points and was identified as the model with the clearest evidence of overfitting.
-
-### Cross-Validation Analysis
-
-Five-fold cross-validation was used to evaluate whether model performance remained consistent across different subsets of the training data.
-
-![Cross-Validation vs Test Accuracy](images/cross_validation.png)
-
-| Model               | CV Mean Accuracy | Test Accuracy | Difference |
-| ------------------- | ---------------: | ------------: | ---------: |
-| Logistic Regression |           80.86% |        80.50% |      0.36% |
-| SVM                 |           85.69% |        85.80% |      0.11% |
-| Random Forest       |           85.71% |        85.95% |      0.24% |
-| Decision Tree       |           82.84% |        83.30% |      0.46% |
+| Model | Training Accuracy | Testing Accuracy | Gap |
+|---|---:|---:|---:|
+| Logistic Regression | 80.73% | 80.50% | 0.22% |
+| SVM | 85.96% | 85.80% | 0.16% |
+| Random Forest | 89.38% | 85.95% | 3.43% |
+| Decision Tree | 89.41% | 83.30% | 6.11% |
 
 ### Generalization Findings
 
-All four models produced cross-validation scores relatively close to their held-out test accuracy, indicating stable performance across different samples of the data.
+Logistic Regression and SVM showed very small differences between training and testing accuracy, indicating consistent performance across the two datasets.
 
-Random Forest achieved a mean cross-validation accuracy of 85.71% compared with 85.95% on the test set, a difference of only 0.24 percentage points.
+Random Forest produced a 3.43 percentage-point train-test gap. Although larger than the gaps for Logistic Regression and SVM, the model maintained strong testing performance.
 
-This result provides further evidence that Random Forest's performance was not dependent on a single favorable train-test split.
+Decision Tree showed the largest gap at 6.11 percentage points, indicating greater evidence of overfitting.
 
-Decision Tree also produced similar cross-validation and testing results, but its larger training-to-testing performance gap indicated greater overfitting than the other models.
+The comparison between Random Forest and Decision Tree is particularly useful. Both achieved approximately 89.4% training accuracy, but Random Forest maintained 85.95% testing accuracy compared with 83.30% for Decision Tree.
 
-### Why This Matters
+This indicates that the Random Forest ensemble generalized more effectively than the standalone Decision Tree.
 
-For a churn model to provide business value, it must perform reliably on customers it did not encounter during training.
+---
 
-The combination of strong test performance, consistent cross-validation results, and an acceptable training-to-testing gap strengthened the case for selecting Random Forest as the final model.
+## Cross-Validation Analysis
 
-## Final Model Selection
+Five-fold cross-validation was used as an additional measure of model stability.
 
-Model selection was based on more than a single performance metric. I evaluated testing accuracy, F1-score, ROC-AUC, cross-validation performance, and generalization to determine which model provided the strongest overall solution.
+Rather than relying entirely on a single train-test split, cross-validation evaluates model performance across multiple subsets of the training data.
 
-### Final Model Ranking
+![Cross Validation Performance](images/cross_validation.png)
 
-| Rank | Model               | Overall Score | Test Accuracy | F1-Score | ROC-AUC |
-| ---: | ------------------- | ------------: | ------------: | -------: | ------: |
-|    1 | Random Forest       |        0.7826 |        85.95% |   0.5446 |  0.8472 |
-|    2 | SVM                 |        0.7640 |        85.80% |   0.5186 |  0.7976 |
-|    3 | Decision Tree       |        0.7401 |        83.30% |   0.4970 |  0.7788 |
-|    4 | Logistic Regression |        0.6641 |        80.50% |   0.2353 |  0.7711 |
+### Cross-Validation Results
+
+| Model | CV Mean Accuracy | Test Accuracy | Difference |
+|---|---:|---:|---:|
+| Logistic Regression | 80.74% | 80.50% | 0.24% |
+| SVM | 85.06% | 85.80% | 0.74% |
+| Random Forest | 85.71% | 85.95% | 0.24% |
+| Decision Tree | 82.85% | 83.30% | 0.45% |
+
+### Cross-Validation Findings
+
+Random Forest achieved the highest mean cross-validation accuracy at 85.71%.
+
+Its cross-validation accuracy was also close to its 85.95% held-out test accuracy, providing evidence of stable performance across different subsets of the data.
+
+SVM also performed consistently, achieving 85.06% mean cross-validation accuracy and 85.80% testing accuracy.
+
+All four models produced cross-validation results relatively close to their held-out testing performance.
+
+---
+
+## Final Model Ranking
+
+The final model was selected using multiple evaluation criteria rather than relying on a single performance metric.
+
+The selection framework considered:
+
+- Testing accuracy
+- F1-score
+- ROC-AUC
+- Cross-validation performance
+- Generalization
+
+### Custom Selection Framework
+
+A project-specific weighted Selection Score was calculated using:
+
+| Evaluation Criterion | Weight |
+|---|---:|
+| Testing Accuracy | 30% |
+| F1-Score | 25% |
+| ROC-AUC | 25% |
+| Cross-Validation Accuracy | 15% |
+| Generalization | 5% |
+
+The Selection Score is a custom decision metric created for this analysis. It is not a standard machine learning evaluation metric and should be interpreted alongside the individual model-performance measures.
+
+### Final Ranking
+
+| Rank | Model | Selection Score | Test Accuracy | Precision | Recall | F1-Score | ROC-AUC |
+|---:|---|---:|---:|---:|---:|---:|---:|
+| 1 | Random Forest | 0.7826 | 85.95% | 80.00% | 41.28% | 0.5446 | 0.8472 |
+| 2 | SVM | 0.7640 | 85.80% | 83.61% | 37.59% | 0.5186 | 0.7976 |
+| 3 | Decision Tree | 0.7401 | 83.30% | 64.20% | 40.54% | 0.4970 | 0.7788 |
+| 4 | Logistic Regression | 0.6641 | 80.50% | 58.25% | 14.74% | 0.2353 | 0.7711 |
 
 ### Recommended Model: Random Forest
 
-Random Forest was selected as the final model because it provided the strongest overall balance across the evaluation criteria.
+Random Forest was selected because it provided the strongest overall balance across the evaluation criteria.
 
-Key results:
+While SVM achieved the highest precision at 83.61%, Random Forest achieved the highest testing accuracy, recall, F1-score, ROC-AUC, and cross-validation accuracy.
 
-* 85.95% testing accuracy
-* 80.00% precision
-* 41.28% recall
-* 0.5446 F1-score
-* 0.8472 ROC-AUC
-* 85.71% five-fold cross-validation accuracy
-* 3.43 percentage-point training/testing gap
+### Final Model Performance
 
-Random Forest achieved the highest testing accuracy, recall, F1-score, and ROC-AUC among the four models.
+| Metric | Random Forest |
+|---|---:|
+| Training Accuracy | 89.38% |
+| Testing Accuracy | 85.95% |
+| Precision | 80.00% |
+| Recall | 41.28% |
+| F1-Score | 0.5446 |
+| ROC-AUC | 0.8472 |
+| 5-Fold CV Accuracy | 85.71% |
+| Train-Test Gap | 3.43% |
+| Selection Score | 0.7826 |
 
-SVM slightly outperformed Random Forest in precision, but Random Forest identified more customers who actually churned while maintaining strong precision.
-
-This tradeoff is important for customer retention because failing to identify an at-risk customer may mean losing the opportunity to intervene before that customer leaves.
+The model's performance across multiple evaluation measures made Random Forest the strongest candidate for the customer churn prediction objective.
 
 ---
 
 ## Business Recommendation
 
-The Random Forest model could be used as the foundation of a customer churn risk-scoring process.
+The Random Forest model could serve as the foundation for a customer churn risk-scoring process.
 
-Rather than treating all customers as having the same retention risk, the bank could use predicted churn probabilities to prioritize customers for further analysis and targeted intervention.
+Rather than treating every customer as having the same retention risk, the bank could use predicted churn probabilities to prioritize customers for further analysis and targeted intervention.
 
 ### Potential Decision Workflow
 
@@ -445,12 +427,12 @@ Rather than treating all customers as having the same retention risk, the bank c
 
 Potential retention actions could include:
 
-* Prioritized outreach to customers with elevated churn risk
-* Review of product relationships for high-risk customers
-* Personalized retention offers
-* Customer service follow-up
-* Analysis of account engagement and activity
-* Testing different retention strategies across risk segments
+- Prioritized outreach to customers with elevated churn risk
+- Review of product relationships for high-risk customers
+- Personalized retention offers
+- Customer service follow-up
+- Analysis of account engagement and activity
+- Testing different retention strategies across risk segments
 
 The model should support business decisions rather than automatically determine how a customer is treated.
 
@@ -466,9 +448,11 @@ Three findings stood out:
 
 2. Model tradeoffs matter. SVM produced the highest precision, while Random Forest provided the strongest balance of recall, F1-score, ROC-AUC, and overall accuracy.
 
-3. Model reliability matters alongside performance. Random Forest's cross-validation accuracy of 85.71% closely matched its 85.95% test accuracy, supporting its ability to generalize beyond the training data.
+3. Model reliability matters alongside performance. Random Forest's cross-validation accuracy of 85.71% closely matched its 85.95% testing accuracy, providing evidence of stable performance across different subsets of the data.
 
 The final result was not simply a higher-performing classification model. The analysis produced a framework for identifying churn risk and translating predictive output into customer retention decisions.
+
+---
 
 ## Project Structure
 
@@ -493,66 +477,45 @@ customer-churn-predictive-modeling/
 ├── notebooks/
 │   └── customer_churn_modeling.ipynb
 │
-├── reports/
-│   └── model_analysis.pdf
-│
 ├── .gitignore
-├── requirements.txt
 └── README.md
 ```
 
 ### Repository Contents
 
-* `data/` — Information about the customer churn dataset used for the analysis
-* `images/` — Visualizations generated during exploratory analysis and model evaluation
-* `notebooks/` — Complete Python machine learning workflow
-* `reports/` — Supporting model analysis and project documentation
-* `requirements.txt` — Python packages required to reproduce the analysis
+- `data/` — Information about the customer churn dataset used for the analysis
+- `images/` — Visualizations generated during exploratory analysis and model evaluation
+- `notebooks/` — Complete Python machine learning workflow
 
 ---
 
 ## Limitations & Future Improvements
 
-The project provides a strong baseline for customer churn classification, but several areas could be explored before applying the model in a production environment.
+The project provides a baseline for customer churn classification, but several areas could be explored before applying the model in a production environment.
 
 ### Current Limitations
 
-* The target variable is imbalanced, with approximately 20% of customers belonging to the churn class.
-* The models were evaluated using a single dataset rather than customer data collected across multiple time periods.
-* Feature importance identifies variables used by the model but does not establish causal relationships with churn.
-* The current analysis uses a default classification threshold rather than optimizing the threshold around the business cost of false positives and false negatives.
-* The analysis evaluates predictive performance but does not measure the financial impact of retention interventions.
+- The target variable is imbalanced, with approximately 20% of customers belonging to the churn class.
+- Random Forest identified 41.28% of actual churners, meaning a substantial portion of churned customers were still missed.
+- The models were evaluated using a single dataset rather than customer data collected across multiple time periods.
+- Feature importance identifies variables used by the model but does not establish causal relationships with churn.
+- The current analysis uses a default classification threshold rather than optimizing the threshold around the business cost of false positives and false negatives.
+- The analysis evaluates predictive performance but does not measure the financial impact of retention interventions.
 
 ### Future Improvements
 
-* Tune model hyperparameters using `GridSearchCV` or `RandomizedSearchCV`
-* Evaluate class-weighted models to address class imbalance
-* Compare additional boosting algorithms
-* Add Precision-Recall curves for minority-class evaluation
-* Optimize the classification threshold based on business objectives
-* Use SHAP values to improve individual prediction explainability
-* Convert predicted probabilities into customer risk segments
-* Estimate the financial value of successful churn interventions
-* Monitor model performance and data drift over time
+- Tune Random Forest hyperparameters using `GridSearchCV` or `RandomizedSearchCV`
+- Evaluate class-weighted models to address class imbalance
+- Compare additional ensemble and boosting algorithms
+- Add Precision-Recall curves for minority-class evaluation
+- Optimize the classification threshold based on business objectives
+- Use SHAP values to improve individual prediction explainability
+- Convert predicted probabilities into customer risk segments
+- Incorporate customer lifetime value into retention prioritization
+- Estimate the financial value of successful churn interventions
+- Monitor model performance and data drift over time
 
 A future version could extend the analysis from predicting churn to determining which high-risk customers should receive retention offers based on expected customer value and intervention cost.
-
----
-
-## Dataset
-
-The project uses a retail banking customer churn dataset containing 10,000 customer records.
-
-The modeling target is:
-
-`Exited`
-
-* `0` = Customer retained
-* `1` = Customer churned
-
-The analysis uses nine predictive features after removing identifier fields that were not used for modeling.
-
-See the `data/README.md` file for additional dataset information.
 
 ---
 
@@ -560,7 +523,6 @@ See the `data/README.md` file for additional dataset information.
 
 Shirley Landon
 
-Data Analytics | Predictive Modeling | Python | SQL | Machine Learning
+Data Analytics | Predictive Modeling | Python | SQL | Machine Learning | Business Analytics
 
 This project demonstrates my approach to translating a business problem into a structured predictive modeling workflow, evaluating competing machine learning models, and communicating the results in a way that supports business decision-making.
-
