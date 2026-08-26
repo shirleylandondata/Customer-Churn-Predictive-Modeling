@@ -511,39 +511,6 @@ customer-churn-predictive-modeling/
 
 ---
 
-## How to Run the Analysis
-
-### 1. Clone the Repository
-
-```bash
-git clone https://github.com/shirleylandondata/customer-churn-predictive-modeling.git
-cd customer-churn-predictive-modeling
-```
-
-### 2. Install Required Packages
-
-```bash
-pip install -r requirements.txt
-```
-
-### 3. Add the Dataset
-
-Place `Churn_Modelling.csv` in the appropriate data location described in the `data/README.md`.
-
-### 4. Run the Notebook
-
-Open:
-
-```text
-notebooks/customer_churn_modeling.ipynb
-```
-
-The notebook walks through the complete workflow:
-
-`Data Exploration` → `Preprocessing` → `Model Training` → `Model Evaluation` → `Model Comparison` → `Final Selection`
-
----
-
 ## Limitations & Future Improvements
 
 The project provides a strong baseline for customer churn classification, but several areas could be explored before applying the model in a production environment.
