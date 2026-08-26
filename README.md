@@ -172,3 +172,64 @@ The scaler was fitted only on the training data and then applied to the testing 
 ![Model Recall and F1-Score Comparison](images/model_recall_f1.png)
 
 
+## Model Development & Performance Comparison
+
+Four supervised classification models were trained and evaluated to determine which approach provided the strongest performance for customer churn prediction.
+
+### Models Evaluated
+
+| Model                        | Purpose                                                                                  |
+| ---------------------------- | ---------------------------------------------------------------------------------------- |
+| Logistic Regression          | Established an interpretable baseline for binary classification                          |
+| Support Vector Machine (SVM) | Modeled nonlinear decision boundaries using an RBF kernel                                |
+| Random Forest                | Combined multiple decision trees to capture complex relationships and reduce overfitting |
+| Decision Tree                | Provided an interpretable tree-based classification model                                |
+
+Each model was evaluated on the same held-out test dataset to provide a consistent comparison.
+
+### Model Performance Comparison
+
+![Model Accuracy and Precision Comparison](images/model_accuracy_precision.png)
+
+![Model Recall and F1-Score Comparison](images/model_recall_f1.png)
+
+### Performance Results
+
+| Model               | Test Accuracy | Precision | Recall | F1-Score | ROC-AUC |
+| ------------------- | ------------: | --------: | -----: | -------: | ------: |
+| Logistic Regression |        80.50% |    58.25% | 14.74% |   0.2353 |  0.7711 |
+| SVM                 |        85.80% |    83.61% | 37.59% |   0.5186 |  0.7976 |
+| Random Forest       |        85.95% |    80.00% | 41.28% |   0.5446 |  0.8472 |
+| Decision Tree       |        83.30% |    64.20% | 40.54% |   0.4970 |  0.7788 |
+
+### What the Results Show
+
+Random Forest achieved the highest overall testing accuracy at 85.95%, narrowly outperforming SVM at 85.80%.
+
+SVM achieved the highest precision at 83.61%. This means that when SVM predicted that a customer would churn, it produced fewer false-positive churn predictions than the other models.
+
+Random Forest achieved the highest recall at 41.28%, meaning it identified a larger share of the customers who actually churned.
+
+Random Forest also produced the highest F1-score at 0.5446. Because F1-score balances precision and recall, this result was important when evaluating performance on the minority churn class.
+
+### Why Accuracy Alone Was Not Enough
+
+The dataset contains substantially more retained customers than churned customers. Because of this class imbalance, a model could achieve relatively high overall accuracy while still failing to identify many customers who actually churn.
+
+Logistic Regression demonstrates this issue.
+
+Although the model achieved 80.50% testing accuracy, its recall for churned customers was only 14.74%. In other words, overall accuracy did not provide a complete picture of the model's usefulness for the churn prediction problem.
+
+For this reason, model selection considered multiple performance measures rather than relying on accuracy alone.
+
+### Leading Model
+
+Based on the initial performance comparison, Random Forest emerged as the strongest candidate:
+
+* Testing Accuracy: 85.95%
+* Precision: 80.00%
+* Recall: 41.28%
+* F1-Score: 0.5446
+* ROC-AUC: 0.8472
+
+Random Forest did not lead every individual metric, but it provided the strongest overall balance across the evaluation criteria.
