@@ -346,3 +346,54 @@ For example, `NumOfProducts` had only a weak linear correlation with churn durin
 
 This suggests that its predictive value may involve nonlinear relationships or interactions with other customer characteristics that are not apparent from correlation alone.
 
+## Model Generalization & Overfitting
+
+Strong performance on training data does not guarantee that a machine learning model will perform well on new customers.
+
+To evaluate model reliability, I compared training accuracy with testing accuracy and examined five-fold cross-validation performance.
+
+### Training vs. Testing Performance
+
+![Training vs Testing Accuracy](images/train_test_comparison.png)
+
+| Model               | Training Accuracy | Testing Accuracy |   Gap |
+| ------------------- | ----------------: | ---------------: | ----: |
+| Logistic Regression |            80.88% |           80.50% | 0.38% |
+| SVM                 |            86.23% |           85.80% | 0.43% |
+| Random Forest       |            89.38% |           85.95% | 3.43% |
+| Decision Tree       |            89.41% |           83.30% | 6.11% |
+
+Logistic Regression and SVM showed very small differences between training and testing accuracy.
+
+Random Forest had a larger gap of 3.43 percentage points but remained below the 5-percentage-point threshold used in this analysis to flag potential overfitting.
+
+Decision Tree showed the largest performance gap at 6.11 percentage points and was identified as the model with the clearest evidence of overfitting.
+
+### Cross-Validation Analysis
+
+Five-fold cross-validation was used to evaluate whether model performance remained consistent across different subsets of the training data.
+
+![Cross-Validation vs Test Accuracy](images/cross_validation.png)
+
+| Model               | CV Mean Accuracy | Test Accuracy | Difference |
+| ------------------- | ---------------: | ------------: | ---------: |
+| Logistic Regression |           80.86% |        80.50% |      0.36% |
+| SVM                 |           85.69% |        85.80% |      0.11% |
+| Random Forest       |           85.71% |        85.95% |      0.24% |
+| Decision Tree       |           82.84% |        83.30% |      0.46% |
+
+### Generalization Findings
+
+All four models produced cross-validation scores relatively close to their held-out test accuracy, indicating stable performance across different samples of the data.
+
+Random Forest achieved a mean cross-validation accuracy of 85.71% compared with 85.95% on the test set, a difference of only 0.24 percentage points.
+
+This result provides further evidence that Random Forest's performance was not dependent on a single favorable train-test split.
+
+Decision Tree also produced similar cross-validation and testing results, but its larger training-to-testing performance gap indicated greater overfitting than the other models.
+
+### Why This Matters
+
+For a churn model to provide business value, it must perform reliably on customers it did not encounter during training.
+
+The combination of strong test performance, consistent cross-validation results, and an acceptable training-to-testing gap strengthened the case for selecting Random Forest as the final model.
