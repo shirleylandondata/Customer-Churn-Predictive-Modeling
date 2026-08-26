@@ -293,4 +293,56 @@ The ROC-AUC results provide further support for selecting Random Forest. Its adv
 
 Combined with its leading recall and F1-score, the AUC-ROC result strengthened the case for Random Forest as the best-performing model in this analysis.
 
+## Feature Importance & Business Insights
+
+After Random Forest emerged as the leading model, I examined feature importance to better understand which customer characteristics contributed most to its predictions.
+
+### Tree-Based Feature Importance
+
+![Random Forest and Decision Tree Feature Importance](images/feature_importance.png)
+
+### Random Forest Feature Importance
+
+| Rank | Feature            | Importance |
+| ---: | ------------------ | ---------: |
+|    1 | Age                |     33.87% |
+|    2 | Number of Products |     22.83% |
+|    3 | Balance            |     10.29% |
+|    4 | Estimated Salary   |      9.38% |
+|    5 | Credit Score       |      9.06% |
+|    6 | Active Member      |      7.22% |
+|    7 | Tenure             |      4.46% |
+|    8 | Gender             |      1.79% |
+|    9 | Has Credit Card    |      1.10% |
+
+### Key Findings
+
+Age was the most influential feature in the Random Forest model, accounting for approximately 33.87% of total feature importance.
+
+Number of Products ranked second at 22.83%. Together, these two variables represented approximately 57% of the model's total feature importance.
+
+Balance, estimated salary, and credit score formed the next tier of predictive features.
+
+Active membership also contributed to churn prediction, while tenure, gender, and credit card ownership had lower importance within the Random Forest model.
+
+### From Model Output to Business Action
+
+The feature importance results can help guide where a bank begins investigating customer retention.
+
+For example:
+
+* Customer age could be examined when developing churn-risk segments.
+* Product relationships could be analyzed to determine whether certain product-use patterns are associated with higher churn risk.
+* Account balance and activity could provide further context when prioritizing retention outreach.
+* Customers identified as high risk by the model could be prioritized for targeted retention campaigns rather than applying the same strategy across the entire customer base.
+
+Feature importance indicates how much the model relied on each variable when making predictions. It does not establish that a feature caused a customer to churn.
+
+### An Interesting Modeling Insight
+
+The exploratory correlation analysis and Random Forest results also demonstrate why predictive modeling can reveal relationships that simple correlation does not fully capture.
+
+For example, `NumOfProducts` had only a weak linear correlation with churn during exploratory analysis, yet it became the second-most-important feature in the Random Forest model.
+
+This suggests that its predictive value may involve nonlinear relationships or interactions with other customer characteristics that are not apparent from correlation alone.
 
