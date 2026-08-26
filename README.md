@@ -165,4 +165,10 @@ The scaler was fitted only on the training data and then applied to the testing 
 
 `Raw Customer Data` → `Data Cleaning` → `Feature Encoding` → `Train/Test Split` → `Feature Scaling` → `Model Training` → `Model Evaluation`
 
+### Model Performance Comparison
+
+![Model Accuracy and Precision Comparison](images/model_accuracy_precision.png)
+
+![Model Recall and F1-Score Comparison](images/model_recall_f1.png)
+
 
