@@ -98,3 +98,71 @@ Three identifier fields, `RowNumber`, `CustomerId`, and `Surname`, were removed 
 
 After preprocessing, the modeling dataset contained nine predictor variables and the `Exited` target.
 
+## Exploratory Data Analysis
+
+Before training the classification models, I explored the relationships between customer characteristics and the `Exited` target variable.
+
+A correlation matrix was used to identify linear relationships among the numerical features and provide an initial view of which variables may be associated with customer churn.
+
+### Feature Correlation Matrix
+
+![Feature Correlation Matrix](images/correlation_matrix.png)
+
+### Initial Findings
+
+The correlation analysis highlighted several relationships with customer churn:
+
+| Feature            | Correlation with Churn |
+| ------------------ | ---------------------: |
+| Age                |                  0.285 |
+| Balance            |                  0.119 |
+| Estimated Salary   |                  0.012 |
+| Has Credit Card    |                 -0.007 |
+| Tenure             |                 -0.014 |
+| Credit Score       |                 -0.027 |
+| Number of Products |                 -0.048 |
+| Gender             |                 -0.107 |
+| Active Member      |                 -0.156 |
+
+`Age` showed the strongest positive linear relationship with churn. Older customers in the dataset were more likely to be associated with the `Exited` class.
+
+`IsActiveMember` showed the strongest negative relationship with churn, suggesting that active customers were less likely to leave the bank.
+
+Account `Balance` also showed a positive relationship with churn, although the relationship was considerably weaker than age.
+
+These correlations provide an initial view of customer behavior, but they do not establish causation or fully capture nonlinear relationships. For that reason, all nine predictive features were retained for the classification stage rather than selecting variables based only on correlation.
+
+---
+
+## Data Preparation
+
+The dataset was prepared for machine learning before model training.
+
+### Preprocessing Steps
+
+1. Removed non-predictive identifier fields:
+
+   * `RowNumber`
+   * `CustomerId`
+   * `Surname`
+
+2. Encoded the categorical `Gender` variable into numerical format.
+
+3. Separated the nine predictive features from the `Exited` target variable.
+
+4. Split the dataset into:
+
+   * 8,000 training records
+   * 2,000 testing records
+
+5. Used stratified sampling to preserve the approximately 20.37% churn rate across both datasets.
+
+6. Standardized the predictive features using `StandardScaler`.
+
+The scaler was fitted only on the training data and then applied to the testing data to prevent information from the test set from influencing model training.
+
+### Modeling Pipeline
+
+`Raw Customer Data` → `Data Cleaning` → `Feature Encoding` → `Train/Test Split` → `Feature Scaling` → `Model Training` → `Model Evaluation`
+
+
