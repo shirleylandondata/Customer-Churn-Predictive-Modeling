@@ -187,11 +187,6 @@ Four supervised classification models were trained and evaluated to determine wh
 
 Each model was evaluated on the same held-out test dataset to provide a consistent comparison.
 
-### Model Performance Comparison
-
-![Model Accuracy and Precision Comparison](images/model_accuracy_precision.png)
-
-![Model Recall and F1-Score Comparison](images/model_recall_f1.png)
 
 ### Performance Results
 
