@@ -266,3 +266,31 @@ Decision Tree identified nearly as many churners as Random Forest but generated 
 
 From a retention perspective, Random Forest provided the strongest balance. It identified the largest number of customers who actually churned without producing the higher level of false-positive predictions seen with the Decision Tree.
 
+## ROC-AUC & Model Discrimination
+
+To evaluate how well each model could distinguish between customers who churned and customers who remained with the bank, I compared their Receiver Operating Characteristic (ROC) curves and Area Under the Curve (AUC) scores.
+
+### ROC Curve Comparison
+
+![ROC Curves for All Models](images/roc_curves.png)
+
+### AUC-ROC Results
+
+| Model               | AUC-ROC |
+| ------------------- | ------: |
+| Logistic Regression |  0.7711 |
+| SVM                 |  0.7976 |
+| Random Forest       |  0.8472 |
+| Decision Tree       |  0.7788 |
+
+### Key Finding
+
+Random Forest achieved the highest AUC-ROC score at 0.8472, providing the strongest overall ability among the four models to distinguish between churned and retained customers.
+
+SVM ranked second with an AUC-ROC of 0.7976, followed by Decision Tree at 0.7788 and Logistic Regression at 0.7711.
+
+The ROC-AUC results provide further support for selecting Random Forest. Its advantage was not limited to classification accuracy. The model also demonstrated the strongest overall discrimination between the two customer outcomes.
+
+Combined with its leading recall and F1-score, the AUC-ROC result strengthened the case for Random Forest as the best-performing model in this analysis.
+
+
