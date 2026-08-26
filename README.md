@@ -397,3 +397,76 @@ Decision Tree also produced similar cross-validation and testing results, but it
 For a churn model to provide business value, it must perform reliably on customers it did not encounter during training.
 
 The combination of strong test performance, consistent cross-validation results, and an acceptable training-to-testing gap strengthened the case for selecting Random Forest as the final model.
+
+## Final Model Selection
+
+Model selection was based on more than a single performance metric. I evaluated testing accuracy, F1-score, ROC-AUC, cross-validation performance, and generalization to determine which model provided the strongest overall solution.
+
+### Final Model Ranking
+
+| Rank | Model               | Overall Score | Test Accuracy | F1-Score | ROC-AUC |
+| ---: | ------------------- | ------------: | ------------: | -------: | ------: |
+|    1 | Random Forest       |        0.7826 |        85.95% |   0.5446 |  0.8472 |
+|    2 | SVM                 |        0.7640 |        85.80% |   0.5186 |  0.7976 |
+|    3 | Decision Tree       |        0.7401 |        83.30% |   0.4970 |  0.7788 |
+|    4 | Logistic Regression |        0.6641 |        80.50% |   0.2353 |  0.7711 |
+
+### Recommended Model: Random Forest
+
+Random Forest was selected as the final model because it provided the strongest overall balance across the evaluation criteria.
+
+Key results:
+
+* 85.95% testing accuracy
+* 80.00% precision
+* 41.28% recall
+* 0.5446 F1-score
+* 0.8472 ROC-AUC
+* 85.71% five-fold cross-validation accuracy
+* 3.43 percentage-point training/testing gap
+
+Random Forest achieved the highest testing accuracy, recall, F1-score, and ROC-AUC among the four models.
+
+SVM slightly outperformed Random Forest in precision, but Random Forest identified more customers who actually churned while maintaining strong precision.
+
+This tradeoff is important for customer retention because failing to identify an at-risk customer may mean losing the opportunity to intervene before that customer leaves.
+
+---
+
+## Business Recommendation
+
+The Random Forest model could be used as the foundation of a customer churn risk-scoring process.
+
+Rather than treating all customers as having the same retention risk, the bank could use predicted churn probabilities to prioritize customers for further analysis and targeted intervention.
+
+### Potential Decision Workflow
+
+`Customer Data` → `Random Forest Model` → `Churn Risk Score` → `High-Risk Customer Segment` → `Targeted Retention Action` → `Measure Outcome`
+
+Potential retention actions could include:
+
+* Prioritized outreach to customers with elevated churn risk
+* Review of product relationships for high-risk customers
+* Personalized retention offers
+* Customer service follow-up
+* Analysis of account engagement and activity
+* Testing different retention strategies across risk segments
+
+The model should support business decisions rather than automatically determine how a customer is treated.
+
+---
+
+## Key Takeaways
+
+This project demonstrated that selecting a predictive model requires more than comparing accuracy scores.
+
+Three findings stood out:
+
+1. Accuracy can hide poor minority-class performance. Logistic Regression achieved 80.50% accuracy but identified only 14.74% of actual churners.
+
+2. Model tradeoffs matter. SVM produced the highest precision, while Random Forest provided the strongest balance of recall, F1-score, ROC-AUC, and overall accuracy.
+
+3. Model reliability matters alongside performance. Random Forest's cross-validation accuracy of 85.71% closely matched its 85.95% test accuracy, supporting its ability to generalize beyond the training data.
+
+The final result was not simply a higher-performing classification model. The analysis produced a framework for identifying churn risk and translating predictive output into customer retention decisions.
+
